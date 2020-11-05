@@ -15,10 +15,12 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
     private final String proxyServer;
 //    private HttpOutboundHandler handler;
     private MyOkHttpClient handler;
+    private HttpRequestFilter filter;
     public HttpInboundHandler(String proxyServer) {
         this.proxyServer = proxyServer;
 //        handler = new HttpOutboundHandler(this.proxyServer);
         handler = new MyOkHttpClient(this.proxyServer);
+        filter = new MyRequestFilter();
     }
     
     @Override
@@ -36,6 +38,7 @@ public class HttpInboundHandler extends ChannelInboundHandlerAdapter {
 //            if (uri.contains("/test")) {
 //                handlerTest(fullRequest, ctx);
 //            }
+            filter.filter(fullRequest,ctx);
     
             handler.handle(fullRequest, ctx);
     
